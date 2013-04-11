@@ -7,21 +7,16 @@ use cdn\Application;
 
 $BackendApp = new Application();
 
-debug_echo('[ base url: '.$BackendApp->router->request->url_base.' ] - [ ');
-debug_echo('dirty url: '.$BackendApp->router->request->url_dirty.' ] - [ ');
-debug_echo('clean url: '.$BackendApp->router->request->url_clean.' ]');
+echo $BackendApp->request->url_base_path;
 
-$BackendApp->router->map('/', 'someController:indexAction', array('methods' => 'GET'));
-$BackendApp->router->map('/login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
-$BackendApp->router->map('/users/','users#create', array('methods' => 'POST', 'name' => 'users_create'));
-$BackendApp->router->map('/users/','users#list', array('methods' => 'GET', 'name' => 'users_list'));
-$BackendApp->router->map('/users/:id/edit/', 'users#edit', array('methods' => 'GET', 'name' => 'users_edit', 'filters' => array('id' => '(\d+)')));
-$BackendApp->router->map('/contact/', array('controller' => 'somesController', 'action' => 'contactAction'), array('name' => 'contact'));
-
-$BackendApp->router->map('/blog/:slug', array('c' => 'BlogController', 'a' => 'showAction'));
-
-// capture rest of URL in "path" parameter (including forward slashes)
-$BackendApp->router->map('/site-section/:path','some#target',array( 'filters' => array( 'path' => '(.*)') ) );
+$BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET'));
+$BackendApp->router->map('login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
+$BackendApp->router->map('users/','users#create', array('methods' => 'POST', 'name' => 'users_create'));
+$BackendApp->router->map('users/','users#list', array('methods' => 'GET', 'name' => 'users_list'));
+$BackendApp->router->map('users/:id/edit/', 'users#edit', array('methods' => 'GET', 'name' => 'users_edit', 'filters' => array('id' => '(\d+)')));
+$BackendApp->router->map('contact/', array('controller' => 'somesController', 'action' => 'contactAction'), array('name' => 'contact'));
+$BackendApp->router->map('blog/:slug', array('c' => 'BlogController', 'a' => 'showAction'));
+$BackendApp->router->map('site-section/:path','some#target',array( 'filters' => array( 'path' => '(.*)') ) );
 
 $route = $BackendApp->router->matchCurrentRequest();
 ?>
@@ -29,7 +24,6 @@ $route = $BackendApp->router->matchCurrentRequest();
 <?php if($route) { ?>
 	<strong>Target:</strong>
 	<pre><?php var_dump($route->getTarget()); ?></pre>
-
 	<strong>Parameters:</strong>
 	<pre><?php var_dump($route->getParameters()); ?></pre>
 <?php } else { ?>

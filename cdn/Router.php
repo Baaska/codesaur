@@ -101,18 +101,12 @@ class Router
     
     private $routes = array();
     private $namedRoutes = array();
-    private $basePath = '';
-    
-    public function setBasePath($basePath)
-    {
-        $this->basePath = (string) $basePath;
-    }
     
     public function map($routeUrl, $target = '', array $args = array())
     {
         $route = new Route();
         
-        $route->setUrl($this->basePath . $routeUrl);
+        $route->setUrl($this->request->url_base_path . $routeUrl);
         
         $route->setTarget($target);
         

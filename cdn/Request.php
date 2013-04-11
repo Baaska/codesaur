@@ -6,11 +6,13 @@ class Request
     public $url_clean = '';
     public $url_dirty = '';
     public $url_base = '';
+    public $url_base_path = '';
     
     function __construct()
     {
         $this->create_from_req();
         $this->url_base = $this->base_url();
+        $this->url_base_path = $this->base_path();
     }
     
     public function create_from_req()
@@ -40,6 +42,12 @@ class Request
         return $base;
     }
     
+    public function base_path()
+    {
+        $base = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+        return $base;
+    }
+    
     protected function get_clean_url($url)
     {
         $url = str_replace(dirname($_SERVER['SCRIPT_NAME']), '', $url);
@@ -55,7 +63,7 @@ class Request
             $url = substr($url, strlen(basename($_SERVER['SCRIPT_NAME'])) + 1);
         }
         
-        $url = rtrim( $url, '/' ) . '/';
+        $url = rtrim($url, '/' ) . '/';
         $url = preg_replace( '/\/+/', '/', $url );
         return $url;
     }
