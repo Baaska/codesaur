@@ -7,25 +7,25 @@ use cdn\Application;
 
 $BackendApp = new Application();
 
-echo $BackendApp->request->url_base_path;
+echo $BackendApp->request->url_clean;
 
 $BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET'));
 $BackendApp->router->map('login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
-$BackendApp->router->map('users/','users#create', array('methods' => 'POST', 'name' => 'users_create'));
-$BackendApp->router->map('users/','users#list', array('methods' => 'GET', 'name' => 'users_list'));
+$BackendApp->router->map('users/', 'users#create', array('methods' => 'POST', 'name' => 'users_create'));
+$BackendApp->router->map('users/', 'users#list', array('methods' => 'GET', 'name' => 'users_list'));
 $BackendApp->router->map('users/:id/edit/', 'users#edit', array('methods' => 'GET', 'name' => 'users_edit', 'filters' => array('id' => '(\d+)')));
 $BackendApp->router->map('contact/', array('controller' => 'somesController', 'action' => 'contactAction'), array('name' => 'contact'));
 $BackendApp->router->map('blog/:slug', array('c' => 'BlogController', 'a' => 'showAction'));
-$BackendApp->router->map('site-section/:path','some#target',array( 'filters' => array( 'path' => '(.*)') ) );
+$BackendApp->router->map('site-section/:path','some#target', array( 'filters' => array( 'path' => '(.*)') ) );
 
-$route = $BackendApp->router->matchCurrentRequest();
+$route = $BackendApp->router->match_current_request();
 ?>
 <h3>Current URL & HTTP method would route to: </h3>
 <?php if($route) { ?>
 	<strong>Target:</strong>
-	<pre><?php var_dump($route->getTarget()); ?></pre>
+	<pre><?php var_dump($route->get_target()); ?></pre>
 	<strong>Parameters:</strong>
-	<pre><?php var_dump($route->getParameters()); ?></pre>
+	<pre><?php var_dump($route->get_parameters()); ?></pre>
 <?php } else { ?>
 	<pre>No route matched.</pre>
 <?php } ?>

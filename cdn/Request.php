@@ -51,7 +51,7 @@ class Request
     protected function get_clean_url($url)
     {
         $url = str_replace(dirname($_SERVER['SCRIPT_NAME']), '', $url);
-        $query_string = strpos( $url, '?' );
+        $query_string = strpos($url, '?' );
         
         if ($query_string !== FALSE)
         {
@@ -64,7 +64,7 @@ class Request
         }
         
         $url = rtrim($url, '/' ) . '/';
-        $url = preg_replace( '/\/+/', '/', $url );
+        $url = preg_replace( '/\/+/', '/', $url);
         return $url;
     }
 }
