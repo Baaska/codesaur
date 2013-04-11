@@ -11,8 +11,6 @@ debug_echo('[ base url: '.$BackendApp->router->request->url_base.' ] - [ ');
 debug_echo('dirty url: '.$BackendApp->router->request->url_dirty.' ] - [ ');
 debug_echo('clean url: '.$BackendApp->router->request->url_clean.' ]');
 
-$BackendApp->router->setBasePath('/_frameworks/codesaur');
-
 $BackendApp->router->map('/', 'someController:indexAction', array('methods' => 'GET'));
 $BackendApp->router->map('/login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
 $BackendApp->router->map('/users/','users#create', array('methods' => 'POST', 'name' => 'users_create'));

@@ -1,7 +1,7 @@
 <?php
 namespace cdn;
 
-class Routasder
+class Router
 {
     public $request;
     protected $callback = NULL;
