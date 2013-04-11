@@ -7,7 +7,7 @@ use cdn\Application;
 
 $BackendApp = new Application();
 
-echo $BackendApp->request->url_clean;
+echo $BackendApp->request->url_dirty.'|'.$BackendApp->request->url_clean;
 
 $BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET'));
 $BackendApp->router->map('login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
