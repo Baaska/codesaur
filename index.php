@@ -9,11 +9,10 @@ $BackendApp = new Application();
 
 $BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET' , 'name' => 'default_contoller'));
  
-$BackendApp->router->map('/phpinfo/', 'phpinfo.php', array('methods' => 'GET'));
 $BackendApp->router->map('/login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
 $BackendApp->router->map('/users/', 'users#create', array('methods' => 'POST', 'name' => 'users_create'));
 $BackendApp->router->map('/users/', 'users#list', array('methods' => 'GET', 'name' => 'users_list'));
-$BackendApp->router->map('/users/:id/edit/', 'users#edit', array('methods' => 'GET', 'name' => 'users_edit', 'filters' => array('id' => '(\d+)')));
+$BackendApp->router->map('/users/:id/edit/', 'users#edit', array('name' => 'users_edit', 'filters' => array('id' => '(\d+)')));
 $BackendApp->router->map('/contact/', array('controller' => 'somesController', 'action' => 'contactAction'), array('name' => 'contact'));
 $BackendApp->router->map('/blog/:slug', array('c' => 'BlogController', 'a' => 'showAction'));
 $BackendApp->router->map('/site-section/:path','some#target', array( 'filters' => array( 'path' => '(.*)') ) );
@@ -49,7 +48,7 @@ echo "<p>is secure?: ".(($BackendApp->request->isSecure()) ? "TRUE" : "FALSE") .
 
 <h3>Try out these URL's.</h3>
 <p><a href="<?php echo $BackendApp->router->generate('users_edit', array('id' => 5)); ?>"><?php echo $BackendApp->router->generate('users_edit', array('id' => 5)); ?></a></p>
-<p><a href="<?php echo $BackendApp->router->generateWithHttp('contact'); ?>"><?php echo $BackendApp->router->generateWithHttp('contact'); ?></a></p>
+<p><a href="<?php echo $BackendApp->router->generateHttp('contact'); ?>"><?php echo $BackendApp->router->generateHttp('contact'); ?></a></p>
 <p><form action="" method="POST"><input type="submit" value="POST request to current URL" /></form></p>
 <p><form action="" method="PUT"><input type="submit" value="PUT request to current URL" /></form></p>
 <p><form action="" method="DELETE"><input type="submit" value="DELETE request to current URL" /></form></p>

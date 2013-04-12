@@ -114,7 +114,7 @@ class Router
     {
         $route = new Route();
         
-        $route->setUrl(/*$this->request->url_base_path . */$route_url);
+        $route->setUrl($route_url);
         
         $route->setTarget($target);
         
@@ -205,7 +205,7 @@ class Router
         return $this->withPath($url);
     }
     
-    public function generateWithHttp($route_name, array $params = array())
+    public function generateHttp($route_name, array $params = array())
     {
         return $this->withHttp($this->generate($route_name, $params));
     }

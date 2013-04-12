@@ -94,7 +94,14 @@ class Request
 
     protected function cleanUrl($url)
     {
-        $url = str_replace(dirname($this->getScript()), '', $url);
+        $dir_name = dirname($this->getScript());
+        
+        if ($dir_name == DS) {
+            $dir_name = '';
+        }
+        
+        $url = str_replace($dir_name, '', $url);
+        
         $query_string = strpos($url, '?');
         
         if ($query_string !== FALSE) {
@@ -105,7 +112,8 @@ class Request
             $url = substr($url, strlen(basename($this->getScript())) + 1);
         }
         
-        $url = rtrim($url, DS ) . DS;
+        $url = rtrim($url, DS) . DS;
+        
         return $url;
     }
     
