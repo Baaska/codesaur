@@ -86,7 +86,7 @@ class Request
             $base_http = 'http';
         }
         $base_http .= '://'. $this->getHost();
-        $this->_base_http = $this->cleanDoubleSlash($base_http);
+        $this->_base_http = $base_http;
         
         $base_path = str_replace(basename($this->getScript()), '', $this->getScript());
         $this->_base_path =$this->cleanDoubleSlash($base_path);
@@ -109,7 +109,7 @@ class Request
         return $url;
     }
     
-    protected function cleanDoubleSlash($in)
+    public function cleanDoubleSlash($in)
     {
         return preg_replace('/\/+/', '\\1/', $in);
     }

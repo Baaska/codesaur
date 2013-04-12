@@ -105,6 +105,11 @@ class Router
         }
     }
     
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
     public function map($route_url, $target = '', array $args = array())
     {
         $route = new Route();
@@ -134,7 +139,7 @@ class Router
     
     public function matchCurrentRequest()
     {
-        $request_url = $this->request->getUrl();
+        $request_url = $this->request->getCleanUrl();
         
         if (($pos = strpos($request_url, '?')) !== false) {
             $request_url =  substr($request_url, 0, $pos);
@@ -167,6 +172,7 @@ class Router
             }
             
             $route->setParameters($params);
+            
             return $route;
         }
         return FALSE;
@@ -196,6 +202,21 @@ class Router
             $url = '';
         }
         
-        return $url;
+        return $this->withPath($url);
+    }
+    
+    public function generateWithHttp($route_name, array $params = array())
+    {
+        return $this->withHttp($this->generate($route_name, $params));
+    }
+    
+    public function withHttp($url)
+    {
+        return $this->getRequest()->getBaseHttp().$url;
+    }
+
+    public function withPath($url)
+    {
+        return $this->getRequest()->cleanDoubleSlash($this->getRequest()->getBasePath().$url);
     }
 }
