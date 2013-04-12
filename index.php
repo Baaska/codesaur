@@ -32,17 +32,17 @@ echo "<p>is secure?: ".(($BackendApp->request->isSecure()) ? "TRUE" : "FALSE") .
 <h3>Current URL & HTTP method would route to: </h3>
 <?php if($route) { ?>
 	<strong>Url:</strong>   
-	<pre><?php var_dump($route->get_url()); ?></pre>
+	<pre><?php var_dump($route->getUrl()); ?></pre>
 	<strong>Name:</strong>
-	<pre><?php var_dump($route->get_name()); ?></pre>
+	<pre><?php var_dump($route->getName()); ?></pre>
 	<strong>Target:</strong>
-	<pre><?php var_dump($route->get_target()); ?></pre>
+	<pre><?php var_dump($route->getTarget()); ?></pre>
 	<strong>Parameters:</strong>
-	<pre><?php var_dump($route->get_parameters()); ?></pre>
+	<pre><?php var_dump($route->getParameters()); ?></pre>
 	<strong>Methods:</strong>
-	<pre><?php var_dump($route->get_methods()); ?></pre>
+	<pre><?php var_dump($route->getMethods()); ?></pre>
 	<strong>Filters:</strong>
-	<pre><?php var_dump($route->get_filters()); ?></pre>
+	<pre><?php var_dump($route->getFilters()); ?></pre>
 <?php } else { ?>
 	<pre>No route matched.</pre>
 <?php } ?>
