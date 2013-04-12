@@ -7,9 +7,15 @@ use cdn\Application;
 
 $BackendApp = new Application();
 
-echo $BackendApp->request->url_dirty.'|'.$BackendApp->request->url_clean;
+echo '|'.ini_get('error_log').'|';
 
-$BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET'));
+include 'aaa.php';
+
+phpinfo();
+/*
+ $BackendApp->router->map('', 'someController:indexAction', array('methods' => 'GET'));
+ 
+$BackendApp->router->map('phpinfo/', 'phpinfo.php', array('methods' => 'GET'));
 $BackendApp->router->map('login/:id',  array('controller' => 'adminController', 'action' => 'loginAction'), array('name' => 'login'));
 $BackendApp->router->map('users/', 'users#create', array('methods' => 'POST', 'name' => 'users_create'));
 $BackendApp->router->map('users/', 'users#list', array('methods' => 'GET', 'name' => 'users_list'));
@@ -36,3 +42,4 @@ $route = $BackendApp->router->match_current_request();
 <p><form action="" method="POST"><input type="submit" value="Post request to current URL" /></form></p>
 <p><form action="<?php echo $BackendApp->router->generate('users_create'); ?>" method="POST"><input type="submit" value="POST request to <?php echo $BackendApp->router->generate('users_create'); ?>" /></form></p>
 <p><a href="<?php echo $BackendApp->router->generate('users_create'); ?>">GET request to <?php echo $BackendApp->router->generate('users_create'); ?></p>
+ */

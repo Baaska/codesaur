@@ -6,7 +6,7 @@ class Authentication
     public $_login_set = NULL;
     public $session = NULL;
             
-    function __construct($hsession = NULL, $session_login = 'cdn_login')
+    function __construct($hsession = NULL, $session_login = DEF_AUTH_SESS_SET)
     {
         if ($hsession)
             $this->session = $hsession;

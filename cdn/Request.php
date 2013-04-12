@@ -26,7 +26,7 @@ class Request
             $url = $_SERVER['REQUEST_URI'];
         }
 
-        $this->url_dirty = $url;
+        $this->url_dirty = $this->remove_double_slash($url);
         $this->url_clean = $this->get_clean_url($this->url_dirty);
     }
 
@@ -63,8 +63,13 @@ class Request
             $url = substr($url, strlen(basename($_SERVER['SCRIPT_NAME'])) + 1);
         }
         
-        $url = rtrim($url, '/' ) . '/';
-        $url = preg_replace( '/\/+/', '/', $url);
+        $url = rtrim($url, DS ) . DS;
+        $url = $this->remove_double_slash($url);
         return $url;
+    }
+    
+    protected function remove_double_slash($in)
+    {
+        return preg_replace('/\/+/', '\\1/', $in);
     }
 }

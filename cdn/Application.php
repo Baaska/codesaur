@@ -1,6 +1,8 @@
 <?php
 namespace cdn;
 
+require 'Def.php';
+
 require 'Common.php';
 require 'Request.php';
 require 'Router.php';
@@ -22,8 +24,8 @@ class Application
     public $model = NULL;
     public $view = NULL;
     public $response = NULL;
-            
-    function __construct($cdn = 'cdn', $public = 'public', $private = 'private')
+
+    function __construct($cdn = DEF_SYSTEM, $public = DEF_FRONTEND, $private = DEF_BACKEND)
     {        
         $this->setEnvironment();
         $this->definePaths($cdn, $public, $private);
@@ -43,13 +45,13 @@ class Application
     {
         if (defined('DEVELOPMENT'))
         {
-            ini_set('display_errors', 'On');
             error_reporting(E_ALL);
+            ini_set('display_errors', 'On');
         }
         else
         {
-            ini_set('display_errors', 0);
-            error_reporting(0);
+            error_reporting(E_ALL);
+            ini_set('display_errors', 'Off');
         }        
     }
     
@@ -58,14 +60,19 @@ class Application
         $realsyspath = realpath($cdn);
         if ( ! is_dir($realsyspath))
             exit("System folder path does not appear to be set correctly!");
-        define('CDN_SYSTEM', str_replace("\\", "/", $realsyspath.'/'));
+        define('CDN_SYSTEM', str_replace("\\", DS, $realsyspath . DS));
         
-        define('CDN_FRONTEND', $public.'/');
+        define('CDN_INDEX', dirname(CDN_SYSTEM));
+        
+        define('CDN_FRONTEND', $public . DS);
         if ( ! is_dir(CDN_FRONTEND))
             exit("Application folder path does not appear to be set correctly!");
         
-        define('CDN_BACKEND',  $private.'/');
+        define('CDN_BACKEND',  $private . DS);
         if ( ! is_dir(CDN_BACKEND))
             exit("Administrator folder path does not appear to be set correctly!");
+        
+        ini_set('log_errors', 'On');
+        ini_set('error_log', CDN_INDEX.DS.DEF_TEMP_DIR.DS.DEF_LOG_DIR.DS.DEF_ERROR_LOG);
     }
 }

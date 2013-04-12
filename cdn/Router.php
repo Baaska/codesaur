@@ -19,8 +19,8 @@ class Route
     {
         $url = (string) $url;
         
-        if (substr($url, -1) !== '/')
-            $url .= '/';
+        if (substr($url, -1) !== DS)
+            $url .= DS;
         
         $this->url = $url;
     }
@@ -153,7 +153,7 @@ class Router
             if ( ! in_array($request_method, $route->get_methods()))
                     continue;
             
-            if ( ! preg_match("@^".$route->get_regex()."*$@i", $request_url, $matches))
+            if ( ! preg_match("@^" . $route->get_regex() . "*$@i", $request_url, $matches))
                     continue;
 
             $params = array();
