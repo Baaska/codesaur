@@ -3,102 +3,104 @@ namespace cdn;
 
 class Route
 {
-    private $url = '';
-    private $methods = array('GET', 'POST', 'PUT', 'DELETE');
-    private $target;
-    private $name;
-    private $filters = array();
-    private $params = array();
+    private $_url = '';
+    private $_methods = array('GET', 'POST', 'PUT', 'DELETE');
+    private $_target;
+    private $_name;
+    private $_filters = array();
+    private $_params = array();
     
-    public function get_url()
+    public function getUrl()
     {
-        return $this->url;
+        return $this->_url;
     }
     
-    public function set_url($url)
+    public function setUrl($url)
     {
         $url = (string) $url;
         
-        if (substr($url, -1) !== DS)
+        if (substr($url, -1) !== DS) {
             $url .= DS;
+        }
         
-        $this->url = $url;
+        $this->_url = $url;
     }
     
-    public function get_target()
+    public function getTarget()
     {
-        return $this->target;
+        return $this->_target;
     }
     
-    public function set_target($target)
+    public function setTarget($target)
     {
-        $this->target = $target;
+        $this->_target = $target;
     }
     
-    public function get_methods()
+    public function getMethods()
     {
-        return $this->methods;
+        return $this->_methods;
     }
     
-    public function set_methods(array $methods)
+    public function setMethods(array $methods)
     {
-        $this->methods = $methods;
+        $this->_methods = $methods;
     }
     
-    public function get_name()
+    public function getName()
     {
-        return $this->name;
+        return $this->_name;
     }
     
-    public function set_name($name)
+    public function setName($name)
     {
-        $this->name = (string) $name;
+        $this->_name = (string) $name;
     }
     
-    public function set_filters(array $filters)
+    public function setFilters(array $filters)
     {
-        $this->filters = $filters;
+        $this->_filters = $filters;
     }
     
-    public function get_regex()
+    public function getFilters()
     {
-        return preg_replace_callback("/:(\w+)/", array(&$this, 'substitute_filter'), $this->url);
+        return $this->_filters;
     }
     
-    private function substitute_filter($matches)
+    public function getRegex()
     {
-        if (isset($matches[1]) && isset($this->filters[$matches[1]]))
-        {
-            return $this->filters[$matches[1]];
+        return preg_replace_callback("/:(\w+)/", array(&$this, 'substituteFilter'), $this->getUrl());
+    }
+    
+    private function substituteFilter($matches)
+    {
+        if (isset($matches[1]) && isset($this->_filters[$matches[1]])) {
+            return $this->_filters[$matches[1]];
         }
         return "([\w-]+)";
     }
     
-    public function get_parameters()
+    public function getParameters()
     {
-        return $this->params;
+        return $this->_params;
     }
     
-    public function set_parameters(array $parameters)
+    public function setParameters(array $parameters)
     {
-        $this->params = $parameters;
+        $this->_params = $parameters;
     }
 }
 
 class Router
 {
-    public $request = NULL;
+    private $request = NULL;
     private $routes = array();
     private $named_routes = array();
     
     function __construct($_Request = NULL)
     {
-        if ($_Request)
-        {
+        if ($_Request) {
             $this->request = $_Request;
-        }
-        else
-        {
+        } else {
             $this->request = new Request();
         }
     }
@@ -107,90 +109,85 @@ class Router
     {
         $route = new Route();
         
-        $route->set_url($this->request->url_base_path . $route_url);
+        $route->setUrl(/*$this->request->url_base_path . */$route_url);
         
-        $route->set_target($target);
+        $route->setTarget($target);
         
-        if (isset($args['methods']))
-        {
+        if (isset($args['methods'])) {
             $methods = explode(',', $args['methods']);
-            $route->set_methods($methods);
+            $route->setMethods($methods);
         }
         
-        if (isset($args['filters']))
-        {
-            $route->set_filters($args['filters']);
+        if (isset($args['filters'])) {
+            $route->setFilters($args['filters']);
         }
         
-        if (isset($args['name']))
-        {
-            $route->set_name($args['name']);
-            if ( ! isset($this->named_routes[$route->get_name()]))
-            {
-                $this->named_routes[$route->get_name()] = $route;
+        if (isset($args['name'])) {
+            $route->setName($args['name']);
+            
+            if ( ! isset($this->named_routes[$route->getName()])) {
+                $this->named_routes[$route->getName()] = $route;
             }
         }
         $this->routes[] = $route;
     }
     
-    public function match_current_request()
+    public function matchCurrentRequest()
     {
-        $request_method = (isset($_POST['_method']) && ($_method = strtoupper($_POST['_method'])) && in_array($_method, array('PUT', 'DELETE'))) ? $_method : $_SERVER['REQUEST_METHOD'];
-        $request_url = $this->request->url_dirty;
+        $request_url = $this->request->getUrl();
         
-        if (($pos = strpos($request_url, '?')) !== false)
-        {
+        if (($pos = strpos($request_url, '?')) !== false) {
             $request_url =  substr($request_url, 0, $pos);
         }
         
-        return $this->match($request_url, $request_method);
+        return $this->match($request_url, $this->request->getMethod());
     }
     
     public function match($request_url, $request_method = 'GET')
     {
         foreach ($this->routes as $route)
         {
-            if ( ! in_array($request_method, $route->get_methods()))
+            if ( ! in_array($request_method, $route->getMethods())) {
                     continue;
+            }
             
-            if ( ! preg_match("@^" . $route->get_regex() . "*$@i", $request_url, $matches))
+            if ( ! preg_match("@^" . $route->getRegex() . "*$@i", $request_url, $matches)) {
                     continue;
+            }
 
             $params = array();
 
-            if (preg_match_all("/:([\w-]+)/", $route->get_url(), $argument_keys))
-            {
+            if (preg_match_all("/:([\w-]+)/", $route->getUrl(), $argument_keys)) {
                 $argument_keys = $argument_keys[1];
-                foreach ($argument_keys as $key => $name)
-                {
-                    if (isset($matches[$key + 1]))
+                foreach ($argument_keys as $key => $name) {
+                    if (isset($matches[$key + 1])) {
                         $params[$name] = $matches[$key + 1];
+                    }
                 }
             }
             
-            $route->set_parameters($params);
+            $route->setParameters($params);
             return $route;
         }
-        return false;
+        return FALSE;
     }
     
     public function generate($route_name, array $params = array())
     {
-        try 
-        {
-            if ( ! isset($this->named_routes[$route_name]))
+        try {
+            if ( ! isset($this->named_routes[$route_name])) {
                 throw new Exception("No route with the name $route_name has been found.");
+            }
             
             $route = $this->named_routes[$route_name];
-            $url = $route->get_url();
+            $url = $route->getUrl();
             
-            if ($params && preg_match_all("/:(\w+)/", $url, $param_keys))
-            {
+            if ($params && preg_match_all("/:(\w+)/", $url, $param_keys)) {
                 $param_keys = $param_keys[1];
-                foreach ($param_keys as $i => $key)
-                {
-                    if (isset($params[$key]))
+                foreach ($param_keys as $i => $key) {
+                    if (isset($params[$key])) {
                         $url = preg_replace("/:(\w+)/", $params[$key], $url, 1);
+                    }
                 }
             }
         }
@@ -198,6 +195,7 @@ class Router
         {
             $url = '';
         }
+        
         return $url;
     }
 }

@@ -44,13 +44,10 @@ class Application
     
     private function setEnvironment()
     {
-        if (defined('DEVELOPMENT'))
-        {
+        if (defined('DEVELOPMENT')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
-        }
-        else
-        {
+        } else {
             error_reporting(E_ALL);
             ini_set('display_errors', 'Off');
         }        
@@ -59,22 +56,24 @@ class Application
     private function definePaths($cdn, $public, $private)
     {
         $realsyspath = realpath($cdn);
-        if ( ! is_dir($realsyspath))
+        if ( ! is_dir($realsyspath)) {
             exit("System folder path does not appear to be set correctly!");
+        }
+        
         define('CDN_SYSTEM', str_replace("\\", DS, $realsyspath . DS));
-        
         define('CDN_INDEX', dirname(CDN_SYSTEM));
-        
         define('CDN_FRONTEND', $public . DS);
-        if ( ! is_dir(CDN_FRONTEND))
-            exit("Application folder path does not appear to be set correctly!");
-        
         define('CDN_BACKEND',  $private . DS);
-        if ( ! is_dir(CDN_BACKEND))
-            exit("Administrator folder path does not appear to be set correctly!");
         
-        if (defined('DEF_ERROR_LOG'))
-        {
+        if ( ! is_dir(CDN_FRONTEND)) {
+            exit("Application folder path does not appear to be set correctly!");
+        }
+        
+        if ( ! is_dir(CDN_BACKEND)) {
+            exit("Administrator folder path does not appear to be set correctly!");
+        }
+        
+        if (defined('DEF_ERROR_LOG')) {
             ini_set('log_errors', 'On');
             ini_set('error_log', CDN_INDEX.DS.DEF_TEMP_DIR.DS.DEF_LOG_DIR.DS.DEF_ERROR_LOG);
         }

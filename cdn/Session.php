@@ -3,7 +3,7 @@ namespace cdn;
 
 class Session
 {
-    public $_id;
+    private $_ID;
             
     function __construct()
     {
@@ -12,13 +12,18 @@ class Session
     
     public function start()
     {
-        $this->_id = session_id();
+        $this->_ID = session_id();
 
-        if (empty($this->_id))
+        if (empty($this->_ID))
         {
             session_start();
-            $this->_id = session_id();
+            $this->_ID = session_id();
         }
+    }
+    
+    public function getID()
+    {
+        return $this->_ID;
     }
 
     public function check($varname)

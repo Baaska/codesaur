@@ -1,22 +1,18 @@
 <?php
 
-function debug_echo($var, $withComma = false)
+function debugEcho($var, $with_comma = false)
 {
-    if (!defined('DEVELOPMENT'))
+    if (!defined('DEVELOPMENT')) {
         return;
+    }
     
-    if (is_array($var))
-    {
-        if ($withComma)
-        {
-            $withCommaStr = implode(',', $var);
-            echo $withCommaStr;
-        }
-        else
-        {
-            foreach($var as $key => $value)
-            {
-                echo ' '.$key.'=>'. $value.' ';
+    if (is_array($var)) {
+        if ($with_comma) {
+            $comma_inline = implode(',', $var);
+            echo $comma_inline;
+        } else {
+            foreach($var as $key => $value) {
+                echo ' ' . $key . '=>' . $value. ' ';
             }
         }
     }
