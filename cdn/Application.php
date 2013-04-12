@@ -4,6 +4,7 @@ namespace cdn;
 require 'Def.php';
 
 require 'Common.php';
+require 'Exception.php';
 require 'Request.php';
 require 'Router.php';
 require 'Session.php';
@@ -72,7 +73,10 @@ class Application
         if ( ! is_dir(CDN_BACKEND))
             exit("Administrator folder path does not appear to be set correctly!");
         
-        ini_set('log_errors', 'On');
-        ini_set('error_log', CDN_INDEX.DS.DEF_TEMP_DIR.DS.DEF_LOG_DIR.DS.DEF_ERROR_LOG);
+        if (defined('DEF_ERROR_LOG'))
+        {
+            ini_set('log_errors', 'On');
+            ini_set('error_log', CDN_INDEX.DS.DEF_TEMP_DIR.DS.DEF_LOG_DIR.DS.DEF_ERROR_LOG);
+        }
     }
 }

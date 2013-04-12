@@ -176,20 +176,27 @@ class Router
     
     public function generate($route_name, array $params = array())
     {
-        if ( ! isset($this->named_routes[$route_name]))
-            throw new Exception("No route with the name $route_name has been found.");
-        
-        $route = $this->named_routes[$route_name];
-        $url = $route->get_url();
-        
-        if ($params && preg_match_all("/:(\w+)/", $url, $param_keys))
+        try 
         {
-            $param_keys = $param_keys[1];
-            foreach ($param_keys as $i => $key)
+            if ( ! isset($this->named_routes[$route_name]))
+                throw new Exception("No route with the name $route_name has been found.");
+            
+            $route = $this->named_routes[$route_name];
+            $url = $route->get_url();
+            
+            if ($params && preg_match_all("/:(\w+)/", $url, $param_keys))
             {
-                if (isset($params[$key]))
-                    $url = preg_replace("/:(\w+)/", $params[$key], $url, 1);
+                $param_keys = $param_keys[1];
+                foreach ($param_keys as $i => $key)
+                {
+                    if (isset($params[$key]))
+                        $url = preg_replace("/:(\w+)/", $params[$key], $url, 1);
+                }
             }
+        }
+        catch (Exception $e)
+        {
+            $url = '';
         }
         return $url;
     }
