@@ -15,8 +15,7 @@ require 'Model.php';
 require 'View.php';
 require 'Response.php';
 
-class Application
-{
+class Application {
     public $request = NULL;
     public $router = NULL;
     public $session = NULL;
@@ -26,8 +25,7 @@ class Application
     public $view = NULL;
     public $response = NULL;
 
-    function __construct($cdn = DEF_SYSTEM, $public = DEF_FRONTEND, $private = DEF_BACKEND)
-    {        
+    function __construct($cdn = DEF_SYSTEM, $public = DEF_FRONTEND, $private = DEF_BACKEND) {        
         $this->setEnvironment();
         $this->definePaths($cdn, $public, $private);
 
@@ -42,8 +40,7 @@ class Application
         $this->response = new Response();
     }
     
-    private function setEnvironment()
-    {
+    private function setEnvironment() {
         if (defined('DEVELOPMENT')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
@@ -53,8 +50,7 @@ class Application
         }        
     }
     
-    private function definePaths($cdn, $public, $private)
-    {
+    private function definePaths($cdn, $public, $private) {
         $realsyspath = realpath($cdn);
         if ( ! is_dir($realsyspath)) {
             exit("System folder path does not appear to be set correctly!");

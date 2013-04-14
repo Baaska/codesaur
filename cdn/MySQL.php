@@ -1,9 +1,7 @@
 <?php
 namespace cdn\Database;
 
-class MySQL
-{
-    function __construct()
-    {
+class MySQL {
+    function __construct() {
     }
 }

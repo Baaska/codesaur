@@ -1,8 +1,7 @@
 <?php
 namespace cdn;
 
-class Request
-{
+class Request {
     private $_host;
     private $_url = '';
     private $_url_clean = '';
@@ -12,53 +11,43 @@ class Request
     private $_base_path = '';
     private $_secure_http = false;
     
-    function __construct()
-    {
+    function __construct() {
         $this->initFromGlobals();
     }
     
-    public function getHost()
-    {
+    public function getHost() {
         return $this->_host;
     }
     
-    public function getUrl()
-    {
+    public function getUrl() {
         return $this->_url;
     }
     
-    public function getCleanUrl()
-    {
+    public function getCleanUrl() {
         return $this->_url_clean;
     }
     
-    public function getMethod()
-    {
+    public function getMethod() {
         return $this->_method;
     }
     
-    public function getScript()
-    {
+    public function getScript() {
         return $this->_script;
     }
     
-    public function getBaseHttp()
-    {
+    public function getBaseHttp() {
         return $this->_base_http;
     }
     
-    public function getBasePath()
-    {
+    public function getBasePath() {
         return $this->_base_path;
     }
     
-    public function isSecure()
-    {
+    public function isSecure() {
         return $this->_secure_http;
     }
 
-    protected function initFromGlobals()
-    {
+    protected function initFromGlobals() {
         $this->_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
         $this->_script = $this->cleanDoubleSlash((isset($_SERVER['SCRIPT_NAME'])) ? $_SERVER['SCRIPT_NAME'] : '');
                 
@@ -92,8 +81,7 @@ class Request
         $this->_base_path =$this->cleanDoubleSlash($base_path);
     }
 
-    protected function cleanUrl($url)
-    {
+    protected function cleanUrl($url) {
         $dir_name = dirname($this->getScript());
         
         if ($dir_name != DS) {
@@ -115,8 +103,7 @@ class Request
         return $url;
     }
     
-    public function cleanDoubleSlash($in)
-    {
+    public function cleanDoubleSlash($in) {
         return preg_replace('/\/+/', '\\1/', $in);
     }
 }

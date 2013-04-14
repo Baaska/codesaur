@@ -1,24 +1,20 @@
 <?php
 namespace cdn;
 
-class Authentication
-{
+class Authentication {
     private $_session = NULL;
     private $_login = '';
             
-    function __construct($session = NULL, $session_login = DEF_AUTH_SESS_SET)
-    {
+    function __construct($session = NULL, $session_login = DEF_AUTH_SESS_SET) {
         $this->setSession($session);
         $this->setLogin($session_login);
     }
     
-    public function check()
-    {
+    public function check() {
         return $this->session->check($this->getLogin());
     }
     
-    public function setSession($session)
-    {
+    public function setSession($session) {
         if ($session) {
             $this->_session = $session;
         } else {
@@ -26,18 +22,15 @@ class Authentication
         }
     }
     
-    public function getSession()
-    {
+    public function getSession() {
         return $this->_session;
     }
 
-    public function setLogin($new_set)
-    {
+    public function setLogin($new_set) {
         $this->_login = $new_set;
     }
     
-    public function getLogin()
-    {
+    public function getLogin() {
         return $this->_login;
     }
 

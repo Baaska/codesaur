@@ -1,8 +1,7 @@
 <?php
 namespace cdn;
 
-class Route
-{
+class Route {
     private $_url = '';
     private $_methods = array('GET', 'POST', 'PUT', 'DELETE');
     private $_target;
@@ -10,13 +9,11 @@ class Route
     private $_filters = array();
     private $_params = array();
     
-    public function getUrl()
-    {
+    public function getUrl() {
         return $this->_url;
     }
     
-    public function setUrl($url)
-    {
+    public function setUrl($url) {
         $url = (string) $url;
         
         if (substr($url, -1) !== DS) {
@@ -26,78 +23,64 @@ class Route
         $this->_url = $url;
     }
     
-    public function getTarget()
-    {
+    public function getTarget() {
         return $this->_target;
     }
     
-    public function setTarget($target)
-    {
+    public function setTarget($target) {
         $this->_target = $target;
     }
     
-    public function getMethods()
-    {
+    public function getMethods() {
         return $this->_methods;
     }
     
-    public function setMethods(array $methods)
-    {
+    public function setMethods(array $methods) {
         $this->_methods = $methods;
     }
     
-    public function getName()
-    {
+    public function getName() {
         return $this->_name;
     }
     
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->_name = (string) $name;
     }
     
-    public function setFilters(array $filters)
-    {
+    public function setFilters(array $filters) {
         $this->_filters = $filters;
     }
     
-    public function getFilters()
-    {
+    public function getFilters() {
         return $this->_filters;
     }
     
-    public function getRegex()
-    {
+    public function getRegex() {
         return preg_replace_callback("/:(\w+)/", array(&$this, 'substituteFilter'), $this->getUrl());
     }
     
-    private function substituteFilter($matches)
-    {
+    private function substituteFilter($matches) {
         if (isset($matches[1]) && isset($this->_filters[$matches[1]])) {
             return $this->_filters[$matches[1]];
         }
         return "([\w-]+)";
     }
     
-    public function getParameters()
-    {
+    public function getParameters() {
         return $this->_params;
     }
     
-    public function setParameters(array $parameters)
-    {
+    public function setParameters(array $parameters) {
         $this->_params = $parameters;
     }
 }
 
-class Router
-{
+class Router {
     private $request = NULL;
     private $routes = array();
     private $named_routes = array();
     
-    function __construct($_Request = NULL)
-    {
+    function __construct($_Request = NULL) {
         if ($_Request) {
             $this->request = $_Request;
         } else {
@@ -105,13 +88,11 @@ class Router
         }
     }
     
-    public function getRequest()
-    {
+    public function getRequest() {
         return $this->request;
     }
 
-    public function map($route_url, $target = '', array $args = array())
-    {
+    public function map($route_url, $target = '', array $args = array()) {
         $route = new Route();
         
         $route->setUrl($route_url);
@@ -137,8 +118,7 @@ class Router
         $this->routes[] = $route;
     }
     
-    public function matchCurrentRequest()
-    {
+    public function matchCurrentRequest() {
         $request_url = $this->request->getCleanUrl();
         
         if (($pos = strpos($request_url, '?')) !== false) {
@@ -148,8 +128,7 @@ class Router
         return $this->match($request_url, $this->request->getMethod());
     }
     
-    public function match($request_url, $request_method = 'GET')
-    {
+    public function match($request_url, $request_method = 'GET') {
         foreach ($this->routes as $route)
         {
             if ( ! in_array($request_method, $route->getMethods())) {
@@ -178,8 +157,7 @@ class Router
         return FALSE;
     }
     
-    public function generate($route_name, array $params = array())
-    {
+    public function generate($route_name, array $params = array()) {
         try {
             if ( ! isset($this->named_routes[$route_name])) {
                 throw new Exception("No route with the name $route_name has been found.");
@@ -205,18 +183,15 @@ class Router
         return $this->withPath($url);
     }
     
-    public function generateHttp($route_name, array $params = array())
-    {
+    public function generateHttp($route_name, array $params = array()) {
         return $this->withHttp($this->generate($route_name, $params));
     }
     
-    public function withHttp($url)
-    {
+    public function withHttp($url) {
         return $this->getRequest()->getBaseHttp().$url;
     }
 
-    public function withPath($url)
-    {
+    public function withPath($url) {
         return $this->getRequest()->cleanDoubleSlash($this->getRequest()->getBasePath().$url);
     }
 }

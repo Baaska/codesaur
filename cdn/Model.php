@@ -1,9 +1,7 @@
 <?php
 namespace cdn;
 
-class Model
-{
-    function __construct()
-    {
+class Model {
+    function __construct() {
     }
 }

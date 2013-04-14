@@ -1,7 +1,6 @@
 <?php
 
-function debugEcho($var, $with_comma = false)
-{
+function debugEcho($var, $with_comma = false) {
     if (!defined('DEVELOPMENT')) {
         return;
     }

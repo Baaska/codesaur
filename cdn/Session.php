@@ -1,17 +1,14 @@
 <?php
 namespace cdn;
 
-class Session
-{
+class Session {
     private $_ID;
             
-    function __construct()
-    {
+    function __construct() {
         $this->start();
     }
     
-    public function start()
-    {
+    public function start() {
         $this->_ID = session_id();
 
         if (empty($this->_ID))
@@ -21,13 +18,11 @@ class Session
         }
     }
     
-    public function getID()
-    {
+    public function getID() {
         return $this->_ID;
     }
 
-    public function check($varname)
-    {
+    public function check($varname) {
         return (isset($_SESSION[$varname]));
     }
 }

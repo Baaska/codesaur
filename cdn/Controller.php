@@ -1,10 +1,8 @@
 <?php
 namespace cdn;
 
-class Controller
-{
-    function __construct()
-    {
+class Controller {
+    function __construct() {
     }
     
     public function loadModel($name)
