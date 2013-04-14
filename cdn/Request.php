@@ -96,11 +96,9 @@ class Request
     {
         $dir_name = dirname($this->getScript());
         
-        if ($dir_name == DS) {
-            $dir_name = '';
+        if ($dir_name != DS) {
+            $url = str_replace($dir_name, '', $url);
         }
-        
-        $url = str_replace($dir_name, '', $url);
         
         $query_string = strpos($url, '?');
         
