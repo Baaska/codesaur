@@ -15,11 +15,10 @@ class Authentication {
     }
     
     public function setSession($session) {
-        if ($session) {
+        if ($session)
             $this->_session = $session;
-        } else {
+        else
             $this->_session = new Session();
-        }
     }
     
     public function getSession() {

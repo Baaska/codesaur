@@ -51,21 +51,20 @@ class Request {
         $this->_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
         $this->_script = $this->cleanDoubleSlash((isset($_SERVER['SCRIPT_NAME'])) ? $_SERVER['SCRIPT_NAME'] : '');
                 
-        if (isset($_SERVER['REQUEST_URL']) && ! empty($_SERVER['REQUEST_URL'])) {
+        if (isset($_SERVER['REQUEST_URL']) && ! empty($_SERVER['REQUEST_URL']))
             $url = $_SERVER['REQUEST_URL'];
-        } else {
+        else
             $url = $_SERVER['REQUEST_URI'];
-        }        
+
         $this->_url = $this->cleanDoubleSlash($url);
         $this->_url_clean = $this->cleanUrl($this->getUrl());
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['_method']) && (strtoupper($_POST['_method']) == 'PUT'
-                    || strtoupper($_POST['_method']) == 'DELETE')) {
+                    || strtoupper($_POST['_method']) == 'DELETE'))
                 $this->_method = strtoupper($_POST['_method']);
-            } else {
+            else
                 $this->_method = 'POST';
-            }
         }
         
         if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
@@ -84,19 +83,16 @@ class Request {
     protected function cleanUrl($url) {
         $dir_name = dirname($this->getScript());
         
-        if ($dir_name != DS) {
+        if ($dir_name != DS)
             $url = str_replace($dir_name, '', $url);
-        }
         
         $query_string = strpos($url, '?');
         
-        if ($query_string !== FALSE) {
+        if ($query_string !== FALSE)
             $url = substr($url, 0, $query_string);
-        }
       
-        if (substr($url, 1, strlen(basename($this->getScript()))) == basename($this->getScript())) {
+        if (substr($url, 1, strlen(basename($this->getScript()))) == basename($this->getScript()))
             $url = substr($url, strlen(basename($this->getScript())) + 1);
-        }
         
         $url = rtrim($url, DS) . DS;
         

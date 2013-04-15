@@ -16,9 +16,8 @@ class Route {
     public function setUrl($url) {
         $url = (string) $url;
         
-        if (substr($url, -1) !== DS) {
+        if (substr($url, -1) !== DS)
             $url .= DS;
-        }
         
         $this->_url = $url;
     }
@@ -60,9 +59,9 @@ class Route {
     }
     
     private function substituteFilter($matches) {
-        if (isset($matches[1]) && isset($this->_filters[$matches[1]])) {
+        if (isset($matches[1]) && isset($this->_filters[$matches[1]]))
             return $this->_filters[$matches[1]];
-        }
+
         return "([\w-]+)";
     }
     
@@ -81,11 +80,10 @@ class Router {
     private $named_routes = array();
     
     function __construct($_Request = NULL) {
-        if ($_Request) {
+        if ($_Request)
             $this->request = $_Request;
-        } else {
+        else
             $this->request = new Request();
-        }
     }
     
     public function getRequest() {
@@ -104,26 +102,24 @@ class Router {
             $route->setMethods($methods);
         }
         
-        if (isset($args['filters'])) {
+        if (isset($args['filters']))
             $route->setFilters($args['filters']);
-        }
         
         if (isset($args['name'])) {
             $route->setName($args['name']);
             
-            if ( ! isset($this->named_routes[$route->getName()])) {
+            if ( ! isset($this->named_routes[$route->getName()]))
                 $this->named_routes[$route->getName()] = $route;
-            }
         }
+        
         $this->routes[] = $route;
     }
     
     public function matchCurrentRequest() {
         $request_url = $this->request->getCleanUrl();
         
-        if (($pos = strpos($request_url, '?')) !== false) {
+        if (($pos = strpos($request_url, '?')) !== false)
             $request_url =  substr($request_url, 0, $pos);
-        }
         
         return $this->match($request_url, $this->request->getMethod());
     }
@@ -131,22 +127,19 @@ class Router {
     public function match($request_url, $request_method = 'GET') {
         foreach ($this->routes as $route)
         {
-            if ( ! in_array($request_method, $route->getMethods())) {
+            if ( ! in_array($request_method, $route->getMethods()))
                     continue;
-            }
             
-            if ( ! preg_match("@^" . $route->getRegex() . "*$@i", $request_url, $matches)) {
+            if ( ! preg_match("@^" . $route->getRegex() . "*$@i", $request_url, $matches))
                     continue;
-            }
 
             $params = array();
 
             if (preg_match_all("/:([\w-]+)/", $route->getUrl(), $argument_keys)) {
                 $argument_keys = $argument_keys[1];
                 foreach ($argument_keys as $key => $name) {
-                    if (isset($matches[$key + 1])) {
+                    if (isset($matches[$key + 1]))
                         $params[$name] = $matches[$key + 1];
-                    }
                 }
             }
             
@@ -159,9 +152,8 @@ class Router {
     
     public function generate($route_name, array $params = array()) {
         try {
-            if ( ! isset($this->named_routes[$route_name])) {
+            if ( ! isset($this->named_routes[$route_name]))
                 throw new Exception("No route with the name $route_name has been found.");
-            }
             
             $route = $this->named_routes[$route_name];
             $url = $route->getUrl();
@@ -169,9 +161,8 @@ class Router {
             if ($params && preg_match_all("/:(\w+)/", $url, $param_keys)) {
                 $param_keys = $param_keys[1];
                 foreach ($param_keys as $i => $key) {
-                    if (isset($params[$key])) {
+                    if (isset($params[$key]))
                         $url = preg_replace("/:(\w+)/", $params[$key], $url, 1);
-                    }
                 }
             }
         }

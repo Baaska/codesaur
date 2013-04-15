@@ -1,9 +1,8 @@
 <?php
 
 function debugEcho($var, $with_comma = false) {
-    if (!defined('DEVELOPMENT')) {
+    if (!defined('DEVELOPMENT'))
         return;
-    }
     
     if (is_array($var)) {
         if ($with_comma) {
