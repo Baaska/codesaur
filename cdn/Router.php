@@ -91,6 +91,8 @@ class Router {
     }
 
     public function map($route_url, $target = '', array $args = array()) {
+        $route_url = $this->request->cleanDoubleSlash($route_url);
+        
         $route = new Route();
         
         $route->setUrl($route_url);
@@ -124,7 +126,7 @@ class Router {
         return $this->match($request_url, $this->request->getMethod());
     }
     
-    public function match($request_url, $request_method = 'GET') {
+    protected function match($request_url, $request_method = 'GET') {
         foreach ($this->routes as $route)
         {
             if ( ! in_array($request_method, $route->getMethods()))
@@ -165,24 +167,26 @@ class Router {
                         $url = preg_replace("/:(\w+)/", $params[$key], $url, 1);
                 }
             }
+            
+            $url = ltrim($url, DS);
         }
         catch (Exception $e)
         {
             $url = '';
         }
         
-        return $this->withPath($url);
+        return $this->with_path($url);
     }
     
-    public function generateHttp($route_name, array $params = array()) {
-        return $this->withHttp($this->generate($route_name, $params));
+    public function generate_http($route_name, array $params = array()) {
+        return $this->with_http($this->generate($route_name, $params));
     }
     
-    public function withHttp($url) {
+    private function with_http($url) {
         return $this->getRequest()->getBaseHttp().$url;
     }
 
-    public function withPath($url) {
-        return $this->getRequest()->cleanDoubleSlash($this->getRequest()->getBasePath().$url);
+    private function with_path($url) {
+        return $this->getRequest()->getBasePath().$url;
     }
 }
