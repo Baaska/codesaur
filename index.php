@@ -17,7 +17,7 @@ $BackendApp->router->map('/contact/', array('controller' => 'somesController', '
 $BackendApp->router->map('/blog/:slug', array('c' => 'BlogController', 'a' => 'showAction'));
 $BackendApp->router->map('/site-section/:path','some#target', array( 'filters' => array( 'path' => '(.*)') ) );
 
-$route = $BackendApp->router->matchCurrentRequest();
+$route = $BackendApp->router->matchRequest();
 
 echo "<p>host: ".$BackendApp->request->getHost()."</p>";
 echo "<p>script: ".$BackendApp->request->getScript()."</p>";

@@ -117,13 +117,19 @@ class Router {
         $this->routes[] = $route;
     }
     
-    public function matchCurrentRequest() {
-        $request_url = $this->request->getCleanUrl();
+    public function matchRequest($req = NULL) {
+        if ($req == NULL) {
+            $request_url = $this->request->getCleanUrl();
+            $request_method = $this->request->getMethod();
+        } else {
+            $request_url = $req->getCleanUrl();
+            $request_method = $req->getMethod();
+        }        
         
         if (($pos = strpos($request_url, '?')) !== false)
             $request_url =  substr($request_url, 0, $pos);
         
-        return $this->match($request_url, $this->request->getMethod());
+        return $this->match($request_url, $request_method);
     }
     
     protected function match($request_url, $request_method = 'GET') {
